@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ROKUBI</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'Thunder';src:url('https://cdn.jsdelivr.net/gh/dharmatype/Thunder@main/fonts/Thunder-BlackLC.woff2') format('woff2');font-weight:900;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#F9E3EC;--rosa:#F4C9D6;--linen:#F5F0E6;--dark:#D89AAF;
+  --coffee:#3E2723;--mid:#6B3F3A;--accent:#C2185B;
+  --es:cubic-bezier(0.25,0.46,0.45,0.94);
+  --eb:cubic-bezier(0.34,1.1,0.64,1);
+}
+html.dark{
+  --bg:#2E0F17;--rosa:#4B1E2B;--linen:#3a1422;--dark:#8C4A5C;
+  --coffee:#F5F0E6;--mid:#D88A9A;--accent:#D88A9A;
+}
+html,body{font-family:'Bricolage Grotesque',sans-serif;background:var(--bg);color:var(--coffee);-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .5s var(--es),color .5s var(--es);}
+/* ── THEME TOGGLE ── */
+.theme-toggle{position:relative;width:64px;height:32px;cursor:pointer;flex-shrink:0;}
+.tt-track{width:64px;height:32px;background:var(--rosa);border-radius:999px;border:1.5px solid var(--dark);display:flex;align-items:center;padding:3px;position:relative;overflow:hidden;transition:background .45s var(--es),border-color .45s var(--es);}
+.tt-thumb{width:24px;height:24px;border-radius:50%;background:var(--coffee);display:flex;align-items:center;justify-content:center;transform:translateX(0);transition:transform .45s var(--eb),background .45s var(--es);position:relative;z-index:2;flex-shrink:0;}
+.tt-sun,.tt-moon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .3s var(--es),transform .4s var(--eb);}
+.tt-moon{opacity:0;transform:rotate(-40deg) scale(.7);}
+.tt-stars{position:absolute;right:7px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:3px;opacity:0;transition:opacity .4s var(--es);}
+.tt-star{background:var(--coffee);border-radius:50%;}
+html.dark .tt-track{background:#4B1E2B;border-color:#8C4A5C;}
+html.dark .tt-thumb{transform:translateX(32px);background:#F5F0E6;}
+html.dark .tt-sun{opacity:0;transform:rotate(40deg) scale(.7);}
+html.dark .tt-moon{opacity:1;transform:rotate(0deg) scale(1);}
+html.dark .tt-stars{opacity:1;}
+/* ── PAGE-WIDE TRANSITIONS ── */
+.nav,.hero,.stats,.sec-tabs,.catalog,.card,.sheet,
+.card-img,.stat,.fpill,.btn-dark,.btn-ghost,.add-btn,
+.d-img,.d-mi,.cart-foot,.ci,.wiz-opt,.wiz-asm-box,.wiz-ao,
+.footer,.footer-main{transition:background .45s var(--es),border-color .45s var(--es),color .45s var(--es);}
+/* ── DARK MODE OVERRIDES ── */
+html.dark .card:hover{box-shadow:0 20px 48px rgba(0,0,0,.5),0 4px 12px rgba(0,0,0,.25);}
+html.dark .ov{background:rgba(0,0,0,.7);}
+html.dark .btn-ghost{border-color:var(--coffee);}
+html.dark .btn-ghost:hover{background:rgba(245,240,230,.08);}
+html.dark .hero-logo-wrap svg{fill:#D88A9A;}
+html.dark .sec-tab.active{border-bottom-color:#D88A9A;}
+html.dark .card-badge,.html.dark .d-badge{color:#D88A9A;border-color:#8C4A5C;}
+html.dark .card-badge{color:#D88A9A;border-color:#8C4A5C;}
+html.dark .d-badge{color:#D88A9A;border-color:#8C4A5C;}
+html.dark .handle{background:#8C4A5C;}
+html.dark .cart-tv,.html.dark .d-price,.html.dark .ci-rm{color:#D88A9A;}
+html.dark .cart-tv{color:#D88A9A;}
+html.dark .d-price{color:#D88A9A;}
+html.dark .ci-rm{color:#D88A9A;}
+html.dark .wiz-opt.sel,.html.dark .wiz-ao.sel{background:#4B1E2B;border-color:#D88A9A;}
+html.dark .wiz-opt.sel{background:#4B1E2B;border-color:#D88A9A;}
+html.dark .wiz-ao.sel{background:#4B1E2B;border-color:#D88A9A;}
+html.dark .fci-ico.ig{background:#8C4A5C;}
+html.dark .fpill.active{background:var(--coffee);color:var(--bg);}
+html.dark .nav-logo svg{fill:var(--coffee);}
+html.dark .sh-close{background:var(--rosa);}
+html.dark .sh-close:hover{background:var(--dark);}
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:var(--linen);border-bottom:1.5px solid var(--rosa);position:sticky;top:0;z-index:200;gap:12px;}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;transition:opacity .3s var(--es);}
+.nav-logo:hover{opacity:.8;}
+.nav-logo svg{width:42px;height:33px;fill:var(--coffee);}
+.nav-logo-txt{font-family:'Thunder',sans-serif;font-size:26px;letter-spacing:2px;color:var(--coffee);}
+.nav-center{display:flex;gap:10px;}
+.nav-tab{padding:9px 20px;font-size:13px;font-weight:600;color:var(--mid);cursor:pointer;border-radius:8px;border:none;background:transparent;font-family:'Bricolage Grotesque',sans-serif;transition:all .28s var(--es);}
+.nav-tab:hover{color:var(--coffee);background:var(--rosa);}
+.nav-tab.active{color:var(--coffee);background:var(--rosa);}
+.cart-btn{background:var(--coffee);color:var(--bg);border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;cursor:pointer;position:relative;transition:all .28s var(--es);}
+.cart-btn:hover{background:var(--mid);transform:translateY(-1px);}
+.cart-badge{position:absolute;top:-7px;right:-7px;background:var(--accent);color:#fff;border-radius:50%;width:20px;height:20px;font-size:11px;display:none;align-items:center;justify-content:center;font-weight:600;}
+/* HERO */
+.hero{padding:56px 24px 44px;text-align:center;border-bottom:1.5px solid var(--dark);transition:background .5s var(--es);}
+.hero-logo-wrap{margin-bottom:20px;}
+.hero-logo-wrap svg{width:70px;height:55px;fill:var(--accent);}
+.hero-tag{display:inline-block;background:var(--linen);color:var(--mid);font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;padding:5px 16px;border-radius:999px;margin-bottom:18px;border:1px solid var(--dark);}
+.hero h1{font-family:'Thunder',sans-serif;font-size:clamp(60px,12vw,128px);line-height:.88;color:var(--coffee);letter-spacing:2px;margin-bottom:18px;}
+.hero h1 em{color:var(--accent);font-style:normal;}
+.hero p{font-size:15px;font-weight:600;color:var(--mid);line-height:1.7;max-width:400px;margin:0 auto 30px;}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.btn-dark{background:var(--coffee);color:var(--bg);border:none;border-radius:12px;padding:13px 26px;font-size:14px;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;cursor:pointer;transition:all .3s var(--es);}
+.btn-dark:hover{background:var(--mid);transform:translateY(-2px);}
+.btn-ghost{background:transparent;color:var(--coffee);border:1.5px solid var(--coffee);border-radius:12px;padding:13px 26px;font-size:14px;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;cursor:pointer;transition:all .3s var(--es);}
+.btn-ghost:hover{background:rgba(62,39,35,.07);transform:translateY(-2px);}
+/* STATS */
+.stats{display:flex;background:var(--linen);border-bottom:1.5px solid var(--rosa);overflow-x:auto;}
+.stat{flex:1;min-width:70px;padding:20px 10px;text-align:center;border-right:1px solid var(--rosa);transition:background .28s var(--es);}
+.stat:last-child{border-right:none;}
+.stat:hover{background:var(--rosa);}
+.stat-num{font-family:'Thunder',sans-serif;font-size:38px;color:var(--coffee);line-height:1;}
+.stat-label{font-size:11px;font-weight:600;color:var(--mid);margin-top:3px;}
+/* SEC TABS */
+.sec-tabs{display:flex;padding:0 24px;background:var(--bg);border-bottom:1.5px solid var(--rosa);position:sticky;top:57px;z-index:190;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.sec-tab{padding:14px 22px;font-family:'Thunder',sans-serif;font-size:18px;letter-spacing:1px;cursor:pointer;color:var(--mid);border-bottom:3px solid transparent;transition:all .28s var(--es);white-space:nowrap;flex-shrink:0;}
+.sec-tab:hover{color:var(--coffee);}
+.sec-tab.active{color:var(--coffee);border-bottom-color:var(--accent);}
+/* CATALOG */
+.catalog{padding:28px 24px 48px;display:none;}
+.catalog.active{display:block;}
+.cat-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.cat-title{font-family:'Thunder',sans-serif;font-size:34px;color:var(--coffee);letter-spacing:1px;}
+.filters{display:flex;gap:7px;flex-wrap:wrap;}
+.fpill{padding:6px 15px;border-radius:999px;border:1.5px solid var(--dark);font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--mid);transition:all .28s var(--es);font-family:'Bricolage Grotesque',sans-serif;}
+.fpill:hover{border-color:var(--coffee);color:var(--coffee);}
+.fpill.active{background:var(--coffee);color:var(--bg);border-color:var(--coffee);}
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px;}
+/* CARD */
+.card{background:var(--linen);border:1.5px solid var(--rosa);border-radius:18px;overflow:hidden;cursor:pointer;transition:transform .38s var(--eb),box-shadow .38s var(--es),border-color .28s var(--es);will-change:transform;}
+.card:hover{transform:translateY(-8px) scale(1.016);box-shadow:0 20px 48px rgba(62,39,35,.13),0 4px 12px rgba(62,39,35,.06);border-color:var(--dark);}
+.card:active{transform:scale(.97);}
+.card-img{width:100%;height:120px;overflow:hidden;background:var(--rosa);display:flex;align-items:center;justify-content:center;font-size:34px;}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .45s var(--es);}
+.card:hover .card-img img{transform:scale(1.08);}
+.card-fb{transition:transform .45s var(--eb);}
+.card:hover .card-fb{transform:scale(1.18);}
+.card-body{padding:14px 15px 13px;}
+.card-badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--bg);color:var(--accent);border:1px solid var(--dark);margin-bottom:7px;transition:background .28s var(--es);}
+.card:hover .card-badge{background:var(--rosa);}
+.card-name{font-family:'Thunder',sans-serif;font-size:17px;color:var(--coffee);line-height:1.1;letter-spacing:.5px;margin-bottom:5px;}
+.card-sub{font-size:11px;font-weight:600;color:var(--mid);margin-bottom:9px;line-height:1.4;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:9px;border-top:1px solid var(--rosa);}
+.card-price{font-family:'Thunder',sans-serif;font-size:18px;color:var(--coffee);}
+.add-btn{background:var(--coffee);color:var(--bg);border:none;border-radius:8px;padding:7px 13px;font-size:11px;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;cursor:pointer;transition:all .28s var(--es);}
+.add-btn:hover{background:var(--mid);transform:scale(1.06);}
+/* OVERLAY */
+.ov{position:fixed;inset:0;background:rgba(62,39,35,.48);z-index:500;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s var(--es);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);}
+.ov.open{opacity:1;pointer-events:all;}
+.sheet{background:var(--linen);width:100%;max-width:640px;max-height:88vh;border-radius:22px 22px 0 0;overflow-y:auto;-webkit-overflow-scrolling:touch;transform:translateY(100%);transition:transform .42s var(--eb);position:relative;}
+.ov.open .sheet{transform:translateY(0);}
+.handle{width:38px;height:4px;background:var(--dark);border-radius:999px;margin:13px auto 0;}
+.sh-close{position:absolute;top:12px;right:16px;background:var(--bg);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--mid);z-index:5;transition:all .25s var(--es);}
+.sh-close:hover{background:var(--rosa);color:var(--coffee);}
+/* DETAIL */
+.d-img{width:100%;height:200px;background:var(--rosa);display:flex;align-items:center;justify-content:center;font-size:64px;overflow:hidden;}
+.d-img img{width:100%;height:100%;object-fit:cover;}
+.d-body{padding:20px 24px 32px;}
+.d-badge{display:inline-block;font-size:11px;font-weight:600;padding:4px 12px;border-radius:999px;background:var(--bg);color:var(--accent);border:1px solid var(--dark);margin-bottom:10px;}
+.d-name{font-family:'Thunder',sans-serif;font-size:32px;color:var(--coffee);line-height:1;margin-bottom:6px;letter-spacing:1px;}
+.d-price{font-family:'Thunder',sans-serif;font-size:28px;color:var(--accent);margin-bottom:14px;}
+.d-vibe{font-size:14px;font-weight:600;color:var(--mid);line-height:1.75;margin-bottom:20px;}
+.d-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;}
+.d-mi{background:var(--bg);border-radius:12px;padding:12px 14px;border:1px solid var(--rosa);}
+.d-ml{font-size:10px;font-weight:600;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+.d-mv{font-family:'Thunder',sans-serif;font-size:17px;color:var(--coffee);}
+/* CART */
+.cart-hdr{padding:16px 20px 12px;border-bottom:1px solid var(--rosa);position:sticky;top:0;background:var(--linen);z-index:2;}
+.cart-hdr-t{font-family:'Thunder',sans-serif;font-size:26px;color:var(--coffee);letter-spacing:1px;}
+.cart-empty{padding:40px 20px;text-align:center;color:var(--mid);font-size:14px;font-weight:600;}
+.c-items{padding:12px 20px;}
+.ci{display:flex;gap:12px;padding:12px;background:var(--bg);border-radius:12px;margin-bottom:10px;border:1px solid var(--rosa);}
+.ci-ico{width:56px;height:56px;background:var(--rosa);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden;}
+.ci-ico img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
+.ci-inf{flex:1;min-width:0;}
+.ci-n{font-family:'Thunder',sans-serif;font-size:15px;color:var(--coffee);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ci-s{font-size:10px;color:var(--mid);font-weight:600;}
+.ci-p{font-family:'Thunder',sans-serif;font-size:16px;color:var(--coffee);margin-top:4px;}
+.ci-rm{background:transparent;border:none;color:var(--accent);font-size:18px;cursor:pointer;padding:4px;align-self:flex-start;transition:transform .2s var(--es);}
+.ci-rm:hover{transform:scale(1.2);}
+.cart-foot{padding:16px 20px;border-top:1.5px solid var(--dark);background:var(--bg);position:sticky;bottom:0;}
+.cart-tr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.cart-tl{font-size:14px;font-weight:600;color:var(--mid);}
+.cart-tv{font-family:'Thunder',sans-serif;font-size:28px;color:var(--accent);}
+.cart-co{width:100%;background:var(--coffee);color:var(--bg);border:none;border-radius:12px;padding:14px;font-size:15px;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;cursor:pointer;transition:all .3s var(--es);}
+.cart-co:hover{background:var(--mid);}
+/* WIZARD */
+.wiz-hdr{padding:16px 20px;border-bottom:1px solid var(--rosa);position:sticky;top:0;background:var(--linen);z-index:2;}
+.wiz-t{font-family:'Thunder',sans-serif;font-size:24px;color:var(--coffee);letter-spacing:1px;margin-bottom:4px;}
+.wiz-s{font-size:12px;color:var(--mid);font-weight:600;}
+.wiz-prog{height:3px;background:var(--rosa);border-radius:999px;margin-top:10px;}
+.wiz-bar{height:100%;background:var(--accent);border-radius:999px;transition:width .4s var(--es);}
+.wiz-body{padding:16px 20px;}
+.wiz-lbl{display:block;font-size:13px;font-weight:600;color:var(--coffee);margin-bottom:12px;}
+.wiz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:20px;}
+.wiz-opt{background:var(--bg);border:1.5px solid var(--rosa);border-radius:13px;padding:13px 10px;cursor:pointer;text-align:center;transition:all .28s var(--es);}
+.wiz-opt:hover{border-color:var(--dark);transform:translateY(-2px);}
+.wiz-opt.sel{border-color:var(--accent);background:#fce4ed;}
+.wiz-oi{font-size:26px;margin-bottom:6px;}
+.wiz-on{font-family:'Thunder',sans-serif;font-size:13px;color:var(--coffee);margin-bottom:3px;line-height:1.1;}
+.wiz-op{font-size:10px;color:var(--mid);font-weight:600;}
+.wiz-asm-box{background:var(--bg);border:1.5px solid var(--rosa);border-radius:13px;padding:16px;margin-bottom:16px;}
+.wiz-asm-t{font-family:'Thunder',sans-serif;font-size:17px;color:var(--coffee);margin-bottom:5px;}
+.wiz-asm-d{font-size:12px;color:var(--mid);font-weight:600;margin-bottom:12px;line-height:1.5;}
+.wiz-asm-row{display:flex;gap:8px;}
+.wiz-ao{flex:1;padding:12px 8px;background:var(--linen);border:1.5px solid var(--rosa);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all .28s var(--es);}
+.wiz-ao:hover{border-color:var(--dark);}
+.wiz-ao.sel{border-color:var(--accent);background:#fce4ed;}
+.wiz-foot{padding:16px 20px;border-top:1.5px solid var(--dark);background:var(--bg);position:sticky;bottom:0;}
+.wiz-trow{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.wiz-tlbl{font-size:13px;font-weight:600;color:var(--mid);}
+.wiz-tval{font-family:'Thunder',sans-serif;font-size:24px;color:var(--accent);}
+.wiz-nav{display:flex;gap:8px;}
+.wiz-nav button{flex:1;padding:13px;border-radius:11px;font-size:14px;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;cursor:pointer;transition:all .3s var(--es);border:none;}
+.wiz-bk{background:transparent;border:1.5px solid var(--coffee)!important;color:var(--coffee);}
+.wiz-bk:hover{background:rgba(62,39,35,.07);}
+.wiz-nx{background:var(--coffee);color:var(--bg);}
+.wiz-nx:hover{background:var(--mid);}
+.wiz-nx:disabled{opacity:.4;cursor:not-allowed;}
+/* FOOTER */
+.footer{background:var(--coffee);color:var(--bg);}
+.footer-main{padding:32px 28px 24px;display:flex;gap:40px;flex-wrap:wrap;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.12);}
+.f-logo{display:flex;align-items:center;gap:10px;}
+.f-logo svg{width:36px;height:28px;fill:var(--bg);opacity:.9;}
+.f-logo-txt{font-family:'Thunder',sans-serif;font-size:24px;letter-spacing:2px;}
+.f-contact{display:flex;flex-direction:column;gap:12px;}
+.f-ct{font-family:'Thunder',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;opacity:.8;}
+.fci{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;opacity:.85;text-decoration:none;color:var(--bg);transition:opacity .25s var(--es);}
+.fci:hover{opacity:1;}
+.fci-ico{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .25s var(--es);}
+.fci:hover .fci-ico{background:rgba(255,255,255,.2);}
+.fci-ico svg{width:16px;height:16px;fill:var(--bg);}
+.fci-ico.ig{background:var(--accent);}
+.footer-bottom{padding:16px 28px;text-align:center;font-size:11px;font-weight:600;opacity:.4;}
+/* RESPONSIVE */
+@media(max-width:600px){
+  .nav{padding:10px 14px;flex-wrap:wrap;}
+  .nav-center{order:3;width:100%;justify-content:center;}
+  .nav-tab{padding:7px 14px;font-size:12px;}
+  .hero{padding:36px 16px 28px;}
+  .sec-tabs{padding:0 14px;}
+  .catalog{padding:20px 14px 40px;}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;}
+  .d-img{height:160px;}
+  .footer-main{flex-direction:column;gap:24px;}
+}
+</style>
+</head>
+<body>
+<!-- SVG SYMBOLS -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="logo-icon" viewBox="0 0 815.74 623.82">
+    <path d="M199.665,0A40.019,40.019,0,0,0,159.647,40.018,40.019,40.019,0,0,0,198.716,80.025l-0.025,0.012c22.062,55.417,40.926,101.891,42.947,162.027-43.561,28.966-65.834,63.253-84.723,98.387-48.37-18.114-94.545-22.052-137.844-22.299-24.056-1.311-26.184,17.978-1.633,21.123l130.887,19.525c-117.7,344.461,630.609,362.14,519.268,0,73.383-13.719,88.707-14.207,136.162-20.887,16.552-2.791,16.058-18.717-2.051-19.814-60.547-1.655-93.637,9.687-142.701,21.961-19.968-43.395-49.833-74.065-84.332-98.777,0.593-53.141,21.549-110.106,43.197-161.307A40.019,40.019,0,0,0,655.685,40.018,40.019,40.019,0,0,0,615.665,0a40.019,40.019,0,0,0-40.018,40.018,40.019,40.019,0,0,0,10.582,27.111c-22.472,47.443-42.906,97.343-79.492,140.188-72.753-30.47-137.668-25.665-197.947,0C279.47,174.202,252.577,117.62,228.983,67.256A40.019,40.019,0,0,0,239.685,40.018,40.019,40.019,0,0,0,199.665,0Zm0.072,14.91a22.691,22.691,0,1,1-22.689,22.691A22.691,22.691,0,0,1,199.737,14.91Zm416,0a22.691,22.691,0,1,1-22.689,22.691A22.691,22.691,0,0,1,615.737,14.91ZM407.677,338.984c27.741,12.385,109.642,54.281,179.35,17.459,2.057-1.524,4.156-1.194,5.15-0.096,0.497,0.549,0.745,1.289,0.586,2.205-0.159,0.916-0.748,2.019-2,3.182-23.228,22.378-65.305,22.691-103.412,15.756-19.054-3.468-37.102-8.733-51.277-13.904-14.175-5.171-24.529-10.31-27.979-13.281l-0.33-0.283-0.326,0.285c-3.507,3.077-12.92,8.245-25.898,13.484-12.979,5.239-29.558,10.595-47.547,14.227-35.977,7.264-77.562,7.609-107.338-13.5-2.512-1.623-3.797-4.308-3.602-6.113,0.098-0.903,0.502-1.566,1.314-1.941,0.812-0.375,2.108-0.441,3.955,0.127,60.057,29.079,126.26,9.669,179.309-17.559Z"/>
+  </symbol>
+  <symbol id="wa-icon" viewBox="0 0 24 24"><path d="M17.472,14.382c-0.297-0.149-1.758-0.867-2.03-0.967-0.273-0.099-0.471-0.148-0.67,0.15-0.197,0.297-0.767,0.966-0.94,1.164-0.173,0.199-0.347,0.223-0.644,0.075-0.297-0.15-1.255-0.463-2.39-1.475-0.883-0.788-1.48-1.761-1.653-2.059-0.173-0.297-0.018-0.458,0.13-0.606,0.134-0.133,0.298-0.347,0.446-0.52,0.149-0.174,0.198-0.298,0.298-0.497,0.099-0.198,0.05-0.371-0.025-0.52-0.075-0.148-0.669-1.611-0.916-2.206-0.242-0.579-0.487-0.5-0.669-0.51-0.173-0.008-0.371-0.01-0.57-0.01-0.198,0-0.52,0.074-0.792,0.372-0.272,0.297-1.04,1.016-1.04,2.479,0,1.462,1.065,2.875,1.213,3.074,0.149,0.198,2.096,3.2,5.077,4.487,0.709,0.306,1.262,0.489,1.694,0.625,0.712,0.227,1.36,0.195,1.871,0.118,0.571-0.085,1.758-0.719,2.006-1.413,0.248-0.694,0.248-1.289,0.173-1.413C17.967,14.605,17.769,14.531,17.472,14.382zM12.05,21.785h-0.005c-1.774,0-3.513-0.477-5.03-1.378l-0.361-0.214-3.741,0.982,0.998-3.648-0.235-0.374C2.365,15.518,1.848,13.693,1.849,11.811c0.002-5.986,4.868-10.85,10.855-10.85,2.899,0.001,5.62,1.131,7.664,3.178,2.043,2.046,3.169,4.771,3.168,7.668C23.534,16.794,18.67,21.785,12.05,21.785zM20.471,3.364C18.188,1.08,15.102,0,12.054,0,5.465,0,0.102,5.361,0.1,11.95c-0.001,2.107,0.549,4.161,1.595,5.975L0,24l6.335-1.662c1.752,0.955,3.727,1.459,5.739,1.46h0.005c6.585,0,11.948-5.362,11.95-11.951C24.031,8.805,22.755,5.647,20.471,3.364z"/></symbol>
+  <symbol id="ig-icon" viewBox="0 0 24 24"><path d="M12,2.163c3.204,0,3.584.012,4.85.07,3.252.148,4.771,1.691,4.919,4.919.058,1.265.069,1.645.069,4.849,0,3.205-.012,3.584-.069,4.849-.149,3.225-1.664,4.771-4.919,4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.849-.07c-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849,0-3.204.013-3.583.07-4.849C2.281,3.924,3.792,2.38,7.051,2.232,8.317,2.175,8.696,2.163,12,2.163ZM12,0C8.741,0,8.333.014,7.053.072,2.695.272.273,2.69.073,7.052.014,8.333,0,8.741,0,12s.014,3.668.072,4.948c.2,4.358,2.618,6.78,6.98,6.98C8.333,23.986,8.741,24,12,24s3.668-.014,4.948-.072c4.354-.2,6.782-2.618,6.979-6.98.059-1.28.073-1.689.073-4.948,0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014,15.259,0,12,0Zm0,5.838A6.162,6.162,0,1,0,18.162,12,6.162,6.162,0,0,0,12,5.838ZM12,16a4,4,0,1,1,4-4A4,4,0,0,1,12,16Zm6.406-11.845a1.44,1.44,0,1,0,1.44,1.44A1.44,1.44,0,0,0,18.406,4.155Z"/></symbol>
+  <symbol id="mail-icon" viewBox="0 0 24 24"><path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M20,8l-8,5L4,8V6l8,5,8-5V8z"/></symbol>
+</svg>
+
+<!-- HTML -->
+<nav class="nav">
+  <div class="nav-logo" onclick="goHome()">
+    <svg viewBox="0 0 815.74 623.82"><use href="#logo-icon"/></svg>
+    <span class="nav-logo-txt">ROKUBI</span>
+  </div>
+  <div class="nav-center">
+    <button class="nav-tab active" id="ntab-switches" onclick="showSec('switches',this)">Switches</button>
+    <button class="nav-tab" id="ntab-keycaps" onclick="showSec('keycaps',this)">Keycaps</button>
+    <button class="nav-tab" id="ntab-pcb" onclick="showSec('pcb',this)">PCB / Kits</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+    <div class="theme-toggle" onclick="toggleTheme()" title="Cambiar modo">
+      <div class="tt-track">
+        <div class="tt-thumb">
+          <div class="tt-sun"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--bg)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
+          <div class="tt-moon"><svg width="12" height="12" viewBox="0 0 24 24"><path fill="var(--bg)" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+        </div>
+        <div class="tt-stars">
+          <div class="tt-star" style="width:3px;height:3px;"></div>
+          <div class="tt-star" style="width:2px;height:2px;margin-left:5px;"></div>
+          <div class="tt-star" style="width:2px;height:2px;margin-left:1px;"></div>
+        </div>
+      </div>
+    </div>
+    <button class="cart-btn" onclick="openCart()">
+      🛒 Carrito
+      <span class="cart-badge" id="cart-badge">0</span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" id="hero" style="background:var(--rosa)">
+  <div class="hero-logo-wrap"><svg viewBox="0 0 815.74 623.82"><use href="#logo-icon"/></svg></div>
+  <div class="hero-tag" id="htag">Switches Mecánicos</div>
+  <h1 id="htitle">TU PRÓXIMO<br><em>TECLADO</em><br>TE ESPERA</h1>
+  <p id="hdesc">Los mejores switches lineales, táctiles y silenciosos para armar el teclado perfecto.</p>
+  <div class="hero-btns">
+    <button class="btn-dark" onclick="openWizard()">Arma tu propio teclado</button>
+    <button class="btn-ghost" onclick="showSec('switches')">Ver catálogo</button>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num">31</div><div class="stat-label">Switches</div></div>
+  <div class="stat"><div class="stat-num">24</div><div class="stat-label">Keycaps</div></div>
+  <div class="stat"><div class="stat-num">17</div><div class="stat-label">Kits PCB</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Garantía</div></div>
+</div>
+
+<div class="sec-tabs">
+  <div class="sec-tab active" id="stab-switches" onclick="showSec('switches',null,this)">SWITCHES</div>
+  <div class="sec-tab" id="stab-keycaps" onclick="showSec('keycaps',null,this)">KEYCAPS</div>
+  <div class="sec-tab" id="stab-pcb" onclick="showSec('pcb',null,this)">PCB / KITS</div>
+</div>
+
+<div class="catalog active" id="sec-switches">
+  <div class="cat-header">
+    <div class="cat-title">SWITCHES</div>
+    <div class="filters">
+      <button class="fpill active" onclick="doFilter('switches','todos',this)">Todos</button>
+      <button class="fpill" onclick="doFilter('switches','Lineal',this)">Lineal</button>
+      <button class="fpill" onclick="doFilter('switches','Táctil',this)">Táctil</button>
+      <button class="fpill" onclick="doFilter('switches','Clicky',this)">Clicky</button>
+      <button class="fpill" onclick="doFilter('switches','Silent',this)">Silent</button>
+    </div>
+  </div>
+  <div class="grid" id="grid-switches"></div>
+</div>
+
+<div class="catalog" id="sec-keycaps">
+  <div class="cat-header">
+    <div class="cat-title">KEYCAPS</div>
+    <div class="filters">
+      <button class="fpill active" onclick="doFilter('keycaps','todos',this)">Todos</button>
+      <button class="fpill" onclick="doFilter('keycaps','PBT',this)">PBT</button>
+      <button class="fpill" onclick="doFilter('keycaps','ABS',this)">ABS</button>
+      <button class="fpill" onclick="doFilter('keycaps','Doubleshot',this)">Doubleshot</button>
+    </div>
+  </div>
+  <div class="grid" id="grid-keycaps"></div>
+</div>
+
+<div class="catalog" id="sec-pcb">
+  <div class="cat-header">
+    <div class="cat-title">PCB / KITS</div>
+    <div class="filters">
+      <button class="fpill active" onclick="doFilter('pcb','todos',this)">Todos</button>
+      <button class="fpill" onclick="doFilter('pcb','60%',this)">60%</button>
+      <button class="fpill" onclick="doFilter('pcb','65%',this)">65%</button>
+      <button class="fpill" onclick="doFilter('pcb','75%',this)">75%</button>
+      <button class="fpill" onclick="doFilter('pcb','80%',this)">TKL 80%</button>
+      <button class="fpill" onclick="doFilter('pcb','100%',this)">100%</button>
+      <button class="fpill" onclick="doFilter('pcb','Split',this)">Split</button>
+    </div>
+  </div>
+  <div class="grid" id="grid-pcb"></div>
+</div>
+
+<footer class="footer">
+  <div class="footer-main">
+    <div class="f-logo">
+      <svg viewBox="0 0 815.74 623.82"><use href="#logo-icon"/></svg>
+      <span class="f-logo-txt">ROKUBI</span>
+    </div>
+    <div class="f-contact">
+      <div class="f-ct">Contacto</div>
+      <a href="https://wa.me/56956913380" class="fci" target="_blank">
+        <div class="fci-ico"><svg viewBox="0 0 24 24"><use href="#wa-icon"/></svg></div>+56 9 5691 3380
+      </a>
+      <a href="https://instagram.com/rokubi.cl" class="fci" target="_blank">
+        <div class="fci-ico ig"><svg viewBox="0 0 24 24"><use href="#ig-icon"/></svg></div>@rokubi.cl
+      </a>
+      <a href="mailto:rokubicl@gmail.com" class="fci">
+        <div class="fci-ico"><svg viewBox="0 0 24 24"><use href="#mail-icon"/></svg></div>rokubicl@gmail.com
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">ROKUBI · Valparaíso, Chile · 2025</div>
+</footer>
+
+<!-- DETAIL -->
+<div class="ov" id="ov-detail" onclick="closeOv('detail',event)">
+  <div class="sheet">
+    <div class="handle"></div>
+    <button class="sh-close" onclick="closeOv('detail',null)">✕</button>
+    <div class="d-img" id="d-img"></div>
+    <div class="d-body">
+      <div class="d-badge" id="d-badge"></div>
+      <div class="d-name" id="d-name"></div>
+      <div class="d-price" id="d-price"></div>
+      <div class="d-vibe" id="d-vibe"></div>
+      <div class="d-meta" id="d-meta"></div>
+      <button class="btn-dark" style="width:100%;padding:14px;font-size:15px" id="d-add-btn">Agregar al carrito</button>
+    </div>
+  </div>
+</div>
+
+<!-- CART -->
+<div class="ov" id="ov-cart" onclick="closeOv('cart',event)">
+  <div class="sheet">
+    <div class="handle"></div>
+    <button class="sh-close" onclick="closeOv('cart',null)">✕</button>
+    <div class="cart-hdr"><div class="cart-hdr-t">Tu carrito</div></div>
+    <div id="cart-body"></div>
+  </div>
+</div>
+
+<!-- WIZARD -->
+<div class="ov" id="ov-wiz" onclick="closeOv('wiz',event)">
+  <div class="sheet">
+    <div class="handle"></div>
+    <button class="sh-close" onclick="closeOv('wiz',null)">✕</button>
+    <div class="wiz-hdr">
+      <div class="wiz-t" id="wiz-title">Elige tu PCB / Kit</div>
+      <div class="wiz-s" id="wiz-step">Paso 1 de 4</div>
+      <div class="wiz-prog"><div class="wiz-bar" id="wiz-bar" style="width:25%"></div></div>
+    </div>
+    <div class="wiz-body" id="wiz-body"></div>
+    <div class="wiz-foot">
+      <div class="wiz-trow">
+        <div class="wiz-tlbl">Total estimado</div>
+        <div class="wiz-tval" id="wiz-total">$0</div>
+      </div>
+      <div class="wiz-nav">
+        <button class="wiz-bk" id="wiz-bk" onclick="wizBack()" style="display:none">← Atrás</button>
+        <button class="wiz-nx" id="wiz-nx" onclick="wizNext()">Siguiente</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+var SW=[
+  {n:"KBDiy Sakura",t:"Lineal",sub:"Lineal · 45g · Lubricado",p:12100,vibe:"Como escribir sobre pétalos. Suaves, ligeros y con un sonido de seda.",ico:"🌸",meta:[["Tipo","Lineal"],["Actuation","45g"],["Lubricado","Sí"]]},
+  {n:"Epomaker Wisteria",t:"Táctil",sub:"Táctil · Lubricado",p:19400,vibe:"Un toque de elegancia lila. Sentirás un pequeño salto de satisfacción en cada tecla.",ico:"🟣",meta:[["Tipo","Táctil"],["Lubricado","Sí"]]},
+  {n:"Vertex Studio V1",t:"Lineal",sub:"Lineal · 62g · Lubricado",p:23300,vibe:"La joya de la corona. Sonido profundo y una solidez que se siente premium.",ico:"💎",meta:[["Tipo","Lineal"],["Actuation","62g"],["Lubricado","Sí"]]},
+  {n:"Akko Penguin Silent",t:"Táctil Silent",sub:"Táctil Silent · Sin lubricar",p:17100,vibe:"Para los guerreros nocturnos. Todo el placer táctil, en absoluto silencio.",ico:"🐧",meta:[["Tipo","Táctil Silent"],["Lubricado","No"]]},
+  {n:"Epomaker Flamingo",t:"Lineal",sub:"Lineal · Doble resorte",p:18600,vibe:"Vibrantes y rápidos. Su doble resorte hace que la tecla suba con energía única.",ico:"🦩",meta:[["Tipo","Lineal"],["Resorte","Doble"]]},
+  {n:"Gateron Milky Yellow Pro",t:"Lineal",sub:"Lineal · Lubricado",p:13900,vibe:"El clásico eterno. Suave como la mantequilla y con un sonido que enamora.",ico:"🟨",meta:[["Tipo","Lineal"],["Lubricado","Sí"]]},
+  {n:"KBDiy Sea Salt",t:"Lineal",sub:"Lineal · Lubricado",p:11600,vibe:"Frescura en tus dedos. Un switch equilibrado que suena limpio y cristalino.",ico:"🧂",meta:[["Tipo","Lineal"],["Lubricado","Sí"]]},
+  {n:"Aflion Melody",t:"Táctil",sub:"Táctil · Lubricado",p:15500,vibe:"Una melodía rítmica. Su bump táctil es marcado y muy satisfactorio.",ico:"🎵",meta:[["Tipo","Táctil"],["Lubricado","Sí"]]},
+  {n:"Gateron Oil King",t:"Lineal",sub:"Lineal Black · Lubricado",p:29500,vibe:"El rey de la suavidad. Bañado en aceite para un deslizamiento total.",ico:"👑",meta:[["Tipo","Lineal"],["Color","Black"],["Lubricado","Sí"]]},
+  {n:"MMD Princess",t:"Lineal",sub:"Lineal · Lubricado",p:10800,vibe:"Calidad real a precio accesible. Increíblemente estables y divertidos.",ico:"👸",meta:[["Tipo","Lineal"],["Lubricado","Sí"]]},
+  {n:"HMX Hyacinth V2",t:"Lineal",sub:"Lineal · Lubricado",p:21700,vibe:"La nueva escuela del sonido clacky. Rápido, preciso y con personalidad.",ico:"🌺",meta:[["Tipo","Lineal"],["Lubricado","Sí"]]},
+  {n:"Akko V3 Cream Yellow Pro",t:"Lineal",sub:"Lineal · Lubricado",p:14500,vibe:"Una experiencia cremosa. Se siente como si las teclas flotaran.",ico:"🍋",meta:[["Tipo","Lineal"],["Lubricado","Sí"]]},
+  {n:"Akko V3 Cream Blue Pro",t:"Táctil",sub:"Táctil · Lubricado",p:14500,vibe:"El click que no molesta. Respuesta táctil crujiente y muy adictiva.",ico:"🔵",meta:[["Tipo","Táctil"],["Lubricado","Sí"]]},
+  {n:"Gateron Baby Kangaroo",t:"Táctil",sub:"Táctil · Gama alta",p:28900,vibe:"Saltos de precisión. Un táctil de gama alta con retorno muy enérgico.",ico:"🦘",meta:[["Tipo","Táctil"],["Gama","Alta"]]},
+  {n:"Gateron Ink Black V2",t:"Lineal",sub:"Lineal · Premium",p:34200,vibe:"El Rolls Royce de los switches. Sonido oscuro, profundo y fricción cero.",ico:"⚫",meta:[["Tipo","Lineal"],["Serie","Ink"]]},
+  {n:"TTC Gold Pink",t:"Lineal",sub:"Lineal · Ligero",p:22400,vibe:"Ligeros como el aire. Ideales para escribir rápido sin fatiga.",ico:"💗",meta:[["Tipo","Lineal"],["Lubricado","Sí"]]},
+  {n:"Kailh Box White",t:"Clicky",sub:"Clicky · Refinado",p:16800,vibe:"El clicky refinado. Suena como un bolígrafo de lujo, limpio y definido.",ico:"⬜",meta:[["Tipo","Clicky"],["Serie","Box"]]},
+  {n:"Durock T1",t:"Táctil",sub:"Táctil · Fuerte bump",p:19800,vibe:"El táctil por excelencia. Sentirás una montaña de respuesta en cada pulsación.",ico:"⛰️",meta:[["Tipo","Táctil"],["Bump","Alto"]]},
+  {n:"JWK Lavender",t:"Lineal",sub:"Lineal · Seda",p:24500,vibe:"Pura seda lila. JWK hace que el plástico se sienta como cristal.",ico:"🪻",meta:[["Tipo","Lineal"],["Marca","JWK"]]},
+  {n:"WS Morandi",t:"Lineal",sub:"Lineal · RGB optimizado",p:26700,vibe:"La perfección visual y sonora. Su difusor hace que tu RGB brille como nunca.",ico:"🌈",meta:[["Tipo","Lineal"],["RGB","Óptimo"]]},
+  {n:"WS Quartz",t:"Lineal",sub:"Lineal · Transparente",p:25300,vibe:"Transparencia total. Un lineal moderno con rebote muy consistente.",ico:"💠",meta:[["Tipo","Lineal"],["Cuerpo","Transparente"]]},
+  {n:"KTT Strawberry",t:"Lineal",sub:"Lineal · Pop sound",p:18200,vibe:"Dulzura al tacto. KTT logró un switch que suena pop en cada tecla.",ico:"🍓",meta:[["Tipo","Lineal"],["Lubricado","Sí"]]},
+  {n:"KTT Peach",t:"Lineal",sub:"Lineal · Rápido",p:16500,vibe:"Ligero y suave. Perfectos para gaming intensivo por su rapidez.",ico:"🍑",meta:[["Tipo","Lineal"],["Uso","Gaming"]]},
+  {n:"Outemu Lime Silent",t:"Táctil Silent",sub:"Táctil Silent",p:12800,vibe:"Silencio verde. El táctil más silencioso para quienes aman la discreción.",ico:"🟢",meta:[["Tipo","Táctil Silent"],["Lubricado","Sí"]]},
+  {n:"Outemu Peach Silent",t:"Lineal Silent",sub:"Lineal Silent",p:12800,vibe:"Un susurro lineal. Ideal para bibliotecas o streams.",ico:"🔇",meta:[["Tipo","Lineal Silent"],["Lubricado","Sí"]]},
+  {n:"Gateron North Pole",t:"Lineal",sub:"Lineal · Crystal clear",p:31400,vibe:"Escribir sobre hielo. Totalmente transparentes y extremadamente suaves.",ico:"🧊",meta:[["Tipo","Lineal"],["Cuerpo","Clear"]]},
+  {n:"Leobog Graywood V3",t:"Lineal",sub:"Lineal · Budget premium",p:11200,vibe:"La sorpresa del año. Increíblemente baratos para lo bien que suenan.",ico:"🪵",meta:[["Tipo","Lineal"],["Relación","Precio/calidad"]]},
+  {n:"Epomaker Budgerigar",t:"Táctil",sub:"Táctil · Con carácter",p:18900,vibe:"Un táctil con carácter. Potente, firme y con un sonido muy presente.",ico:"🦜",meta:[["Tipo","Táctil"],["Bump","Fuerte"]]},
+  {n:"Akko Piano",t:"Lineal",sub:"Lineal · Elegante",p:17500,vibe:"Elegancia en blanco y negro. Suaves y con un sonido muy limpio.",ico:"🎹",meta:[["Tipo","Lineal"],["Estética","B&W"]]},
+  {n:"Gazzew U4T",t:"Táctil",sub:"Táctil · Thocky",p:29900,vibe:"El Thock supremo. Si buscas el sonido más gordo y profundo, es este.",ico:"🔊",meta:[["Tipo","Táctil"],["Sonido","Thocky"]]},
+  {n:"Everglide Aqua King",t:"Lineal",sub:"Lineal · Crystal",p:32600,vibe:"Agua cristalina. Se ven increíbles y se sienten como si no hubiera fricción.",ico:"💧",meta:[["Tipo","Lineal"],["Cuerpo","Crystal"]]}
+];
+var KC=[
+  {n:"DIXSG Classic White",m:"PBT",fmt:"ANSI",p:21900,vibe:"La pureza de un lienzo en blanco. Ideal para setups minimalistas.",ico:"⬜",meta:[["Material","PBT"],["Formato","ANSI"]]},
+  {n:"WOMIER Soft Touch",m:"PBT",fmt:"ANSI",p:18900,vibe:"Suavidad visual absoluta. Transforma tu teclado en diseño nórdico.",ico:"☁️",meta:[["Material","PBT"],["Formato","ANSI"]]},
+  {n:"GMK Evil Dolch",m:"ABS Doubleshot",fmt:"ANSI",p:44900,vibe:"El lado oscuro de la fuerza. Tonos grises y rojos que imponen autoridad.",ico:"⚫",meta:[["Material","ABS Doubleshot"],["Formato","ANSI"]]},
+  {n:"Afei BOB",m:"ABS Doubleshot",fmt:"ANSI",p:18500,vibe:"Elegancia en modo incógnito. Negro sobre negro premium.",ico:"🖤",meta:[["Material","ABS Doubleshot"],["Formato","ANSI"]]},
+  {n:"KBDiy GMK Style",m:"PBT",fmt:"ANSI",p:36900,vibe:"El look de alta gama con la durabilidad del PBT para uso diario.",ico:"💎",meta:[["Material","PBT"],["Formato","ANSI"]]},
+  {n:"DIXSG Urban Edition",m:"ABS",fmt:"ANSI",p:27800,vibe:"Vibras de ciudad. Resistente para largas sesiones de juego.",ico:"🌆",meta:[["Material","ABS"],["Formato","ANSI"]]},
+  {n:"Gateron MX Clear Sky",m:"ABS Doubleshot",fmt:"ANSI",p:21900,vibe:"Claridad y definición. Eleva la calidad de construcción a otro nivel.",ico:"☁️",meta:[["Material","ABS Doubleshot"],["Formato","ANSI"]]},
+  {n:"Gateron MX Deep Sea",m:"ABS Doubleshot",fmt:"ANSI",p:21900,vibe:"Gradiente de azules que te transporta al fondo del océano.",ico:"🌊",meta:[["Material","ABS Doubleshot"],["Formato","ANSI"]]},
+  {n:"FSWHBY Nature PBT",m:"PBT",fmt:"ANSI",p:19500,vibe:"Tacto rugoso y duradero. Se siente sólido como piedra.",ico:"🪨",meta:[["Material","PBT"],["Formato","ANSI"]]},
+  {n:"K118 PYGA",m:"ABS",fmt:"ANSI",p:18900,vibe:"Inspirado en joyas preciosas. Color translúcido que brilla con luz propia.",ico:"💎",meta:[["Material","ABS"],["Formato","ANSI"]]},
+  {n:"EWEADN GX710S",m:"ABS",fmt:"ANSI",p:39500,vibe:"Geometría y precisión. Tipografía clara en cualquier condición.",ico:"📐",meta:[["Material","ABS"],["Formato","ANSI"]]},
+  {n:"Keybcustz Essential",m:"ABS",fmt:"ANSI",p:14900,vibe:"El balance perfecto entre precio y calidad. El primer paso ideal.",ico:"⚡",meta:[["Material","ABS"],["Formato","ANSI"]]},
+  {n:"GMK Clone Striker",m:"PBT",fmt:"ANSI",p:13500,vibe:"Un azul eléctrico que despierta los sentidos. Energía pura.",ico:"⚡",meta:[["Material","PBT"],["Formato","ANSI"]]},
+  {n:"Bosii Doubleshot",m:"PBT Doubleshot",fmt:"ANSI",p:16800,vibe:"Precisión táctil superior. DoubleShot asegura leyendas eternas.",ico:"🎯",meta:[["Material","PBT Doubleshot"],["Formato","ANSI"]]},
+  {n:"Purforkey Detail",m:"PBT Doubleshot",fmt:"ANSI",p:15900,vibe:"Fabricada con una precisión que se siente al primer contacto.",ico:"🔬",meta:[["Material","PBT Doubleshot"],["Formato","ANSI"]]},
+  {n:"Readson Pro Series",m:"PBT Doubleshot",fmt:"ANSI",p:37800,vibe:"Estabilidad y sonido profundo. Ayuda a conseguir el sonido thocky.",ico:"🔊",meta:[["Material","PBT Doubleshot"],["Formato","ANSI"]]},
+  {n:"KBDiy Elite PBT",m:"PBT Doubleshot",fmt:"ANSI",p:39400,vibe:"La resistencia del PBT llevada al límite. Colores que no se degradan.",ico:"🛡️",meta:[["Material","PBT Doubleshot"],["Formato","ANSI"]]},
+  {n:"Readson Smooth",m:"PBT",fmt:"ANSI",p:22900,vibe:"Deslizamiento suave y consistente para escribir a gran velocidad.",ico:"💨",meta:[["Material","PBT"],["Formato","ANSI"]]},
+  {n:"DIXSG Premium Mix",m:"PBT Doubleshot",fmt:"ANSI",p:22800,vibe:"Mezcla de texturas y colores que rompe la monotonía.",ico:"🎨",meta:[["Material","PBT Doubleshot"],["Formato","ANSI"]]},
+  {n:"Jaycomia Vibrant",m:"PBT",fmt:"ANSI",p:31900,vibe:"Explosión de color. Tonos que resaltan incluso con la luz apagada.",ico:"🌈",meta:[["Material","PBT"],["Formato","ANSI"]]},
+  {n:"BGKYPRO Master",m:"PBT Doubleshot",fmt:"ANSI",p:28300,vibe:"Calidad de competencia. Para entusiastas que no aceptan menos.",ico:"🏆",meta:[["Material","PBT Doubleshot"],["Formato","ANSI"]]},
+  {n:"Venit Keys Designer",m:"ABS",fmt:"ANSI",p:45900,vibe:"Una pieza de arte en tu teclado. Colores curados para cualquier setup.",ico:"🎨",meta:[["Material","ABS"],["Formato","ANSI"]]},
+  {n:"XDA Retro NES",m:"PBT",fmt:"ANSI Y ISO",p:33500,vibe:"Nostalgia pura. Incluye la Ñ (ISO) y leyendas de consola clásica.",ico:"🎮",meta:[["Material","PBT"],["Formato","ANSI + ISO"]]},
+  {n:"Womier Custom",m:"PBT",fmt:"ANSI",p:39800,vibe:"El toque final para tu obra maestra. Versátil para cualquier tamaño.",ico:"✨",meta:[["Material","PBT"],["Formato","ANSI"]]}
+];
+var PCB=[
+  {n:"Zouya GMK67",lay:"65%",teclas:"67",norm:"Ansi",p:68900,vibe:"El Rey de la Comunidad. Suena increíble out of the box.",ico:"👑",meta:[["Layout","65%"],["Teclas","67"],["Norma","ANSI"]]},
+  {n:"GAS67",lay:"65%",teclas:"67",norm:"Ansi",p:64500,vibe:"Efecto Gasket puro. Amortiguación para un tacto suave y descansado.",ico:"🛡️",meta:[["Layout","65%"],["Teclas","67"],["Norma","ANSI"]]},
+  {n:"Mathew Ultra60",lay:"60%",teclas:"61",norm:"ISO",p:59400,vibe:"El tesoro para Chile. Base 60% que soporta el Enter grande (ISO).",ico:"🇨🇱",meta:[["Layout","60%"],["Teclas","61"],["Norma","ISO"]]},
+  {n:"Zouya GMK61",lay:"60%",teclas:"61",norm:"Ansi",p:53800,vibe:"Minimalismo extremo. Pequeño, potente y Hot-swap.",ico:"⚡",meta:[["Layout","60%"],["Teclas","61"],["Norma","ANSI"]]},
+  {n:"Akko ACR 67",lay:"65%",teclas:"67",norm:"Ansi",p:74900,vibe:"Transparencia elegante. Chasis de acrílico para un RGB intenso.",ico:"💎",meta:[["Layout","65%"],["Teclas","67"],["Norma","ANSI"]]},
+  {n:"WEIKAV NUT65",lay:"65%",teclas:"65",norm:"Ansi",p:108900,vibe:"Diseño moderno y estructura sólida con perfil estético único.",ico:"🔩",meta:[["Layout","65%"],["Teclas","65"],["Norma","ANSI"]]},
+  {n:"QMK65",lay:"65%",teclas:"65",norm:"Ansi",p:69900,vibe:"Control Total. Compatible con QMK/VIA para programar cada macro.",ico:"⚙️",meta:[["Layout","65%"],["Teclas","65"],["Norma","ANSI"]]},
+  {n:"Leobog Hi75c",lay:"75%",teclas:"82",norm:"Ansi",p:72600,vibe:"Ingeniería en Aluminio. Sonido marbly y perilla de volumen.",ico:"🎚️",meta:[["Layout","75%"],["Teclas","82"],["Norma","ANSI"]]},
+  {n:"Zouya LMK81",lay:"75%",teclas:"81",norm:"Ansi",p:159900,vibe:"End-game de Aluminio. Pesado y ultra premium.",ico:"🏆",meta:[["Layout","75%"],["Teclas","81"],["Norma","ANSI"]]},
+  {n:"Next Time X75",lay:"75%",teclas:"82",norm:"Ansi",p:74500,vibe:"El favorito del modder. Espacio ideal para espumas y tuning.",ico:"🔧",meta:[["Layout","75%"],["Teclas","82"],["Norma","ANSI"]]},
+  {n:"Akko 5075B",lay:"75%",teclas:"82",norm:"Ansi",p:94900,vibe:"Rendimiento Pro. Triple conectividad BT, 2.4G y Cable.",ico:"📡",meta:[["Layout","75%"],["Teclas","82"],["Norma","ANSI"]]},
+  {n:"Mathew K87",lay:"80%",teclas:"87",norm:"Ansi",p:74900,vibe:"Formato TKL Clásico. El salto de calidad sin perder la costumbre.",ico:"⌨️",meta:[["Layout","TKL 80%"],["Teclas","87"],["Norma","ANSI"]]},
+  {n:"Zouya GMK87",lay:"80%",teclas:"85",norm:"Ansi",p:73500,vibe:"El equilibrio TKL. Robusto y espacioso para trabajar.",ico:"💼",meta:[["Layout","TKL 80%"],["Teclas","85"],["Norma","ANSI"]]},
+  {n:"Sofle V2",lay:"60% Split",teclas:"58",norm:"Sin det.",p:138900,vibe:"Ergonomía Split. Diseñado para cuidar tu postura. Ideal programadores.",ico:"🧘",meta:[["Layout","60% Split"],["Teclas","58"],["Norma","Variable"]]},
+  {n:"Zouya GMK70",lay:"65% Split",teclas:"65",norm:"Ansi",p:89500,vibe:"Compacto pero Ergo. Formato split contenido en una sola pieza.",ico:"🔀",meta:[["Layout","65% Split"],["Teclas","65"],["Norma","ANSI"]]},
+  {n:"Mathew K108",lay:"100%",teclas:"108",norm:"Ansi",p:85800,vibe:"Poder Completo. Incluye teclado numérico para finanzas.",ico:"💯",meta:[["Layout","100%"],["Teclas","108"],["Norma","ANSI"]]},
+  {n:"F108 Noppoo",lay:"100%",teclas:"108",norm:"Ansi",p:75500,vibe:"Tanque de Guerra. Centro de mando sólido para la oficina.",ico:"🏢",meta:[["Layout","100%"],["Teclas","108"],["Norma","ANSI"]]}
+];
+
+var IMSW={"Lineal":"https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=400&q=80","Táctil":"https://images.unsplash.com/photo-1601445638532-3fed1bc92a72?w=400&q=80","Clicky":"https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80","Lineal Silent":"https://images.unsplash.com/photo-1595044426077-d36d9236d54a?w=400&q=80","Táctil Silent":"https://images.unsplash.com/photo-1627483262268-9c2b5b2834b5?w=400&q=80"};
+var IMKC={"PBT":"https://images.unsplash.com/photo-1614832021028-ececf6e94c3b?w=400&q=80","ABS":"https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80","PBT Doubleshot":"https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400&q=80","ABS Doubleshot":"https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=400&q=80"};
+var IMPCB="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80";
+
+function pesos(n){return "$"+n.toLocaleString("es-CL");}
+function swImg(t){return IMSW[t]||IMSW["Lineal"];}
+function kcImg(m){if(m.includes("Doubleshot")&&m.includes("PBT"))return IMKC["PBT Doubleshot"];if(m.includes("Doubleshot"))return IMKC["ABS Doubleshot"];if(m.includes("PBT"))return IMKC["PBT"];return IMKC["ABS"];}
+function kcFkey(m){if(m.includes("Doubleshot"))return "Doubleshot";if(m.includes("PBT"))return "PBT";return "ABS";}
+
+// ── CART ──
+var cart=[], cid=0;
+function addToCart(it){
+  cart.push({id:cid++,name:it.name,sub:it.sub||"",p:it.p,ico:it.ico||"⌨️",img:it.img||null});
+  updateBadge();
+  var b=document.querySelector(".cart-btn");b.style.transform="scale(1.13)";setTimeout(function(){b.style.transform="";},200);
+}
+function rmCart(id){cart=cart.filter(function(i){return i.id!==id;});updateBadge();renderCart();}
+function updateBadge(){var b=document.getElementById("cart-badge");if(cart.length){b.textContent=cart.length;b.style.display="flex";}else{b.style.display="none";}}
+function cartSum(){return cart.reduce(function(s,i){return s+i.p;},0);}
+function renderCart(){
+  var div=document.getElementById("cart-body");
+  if(!cart.length){div.innerHTML='<div class="cart-empty">Tu carrito está vacío 🛒</div>';return;}
+  var h='<div class="c-items">';
+  cart.forEach(function(it){
+    var imgH=it.img?'<img src="'+it.img+'" alt="'+it.name+'">':"<span style='font-size:22px'>"+it.ico+"</span>";
+    h+='<div class="ci"><div class="ci-ico">'+imgH+'</div><div class="ci-inf"><div class="ci-n">'+it.name+'</div><div class="ci-s">'+it.sub+'</div><div class="ci-p">'+pesos(it.p)+'</div></div><button class="ci-rm" onclick="rmCart('+it.id+')">✕</button></div>';
+  });
+  h+='</div><div class="cart-foot"><div class="cart-tr"><div class="cart-tl">Total</div><div class="cart-tv">'+pesos(cartSum())+'</div></div><button class="cart-co">Finalizar compra</button></div>';
+  div.innerHTML=h;
+}
+
+// ── CARDS ──
+function mkCard(cfg){
+  var el=document.createElement("div");el.className="card";el.dataset.f=cfg.fkey;
+  var imgH=cfg.img
+    ?'<img src="'+cfg.img+'" alt="'+cfg.name+'" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+     +'<div class="card-fb" style="display:none;align-items:center;justify-content:center;width:100%;height:100%;font-size:34px">'+cfg.ico+'</div>'
+    :'<div class="card-fb" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:34px">'+cfg.ico+'</div>';
+  el.innerHTML='<div class="card-img">'+imgH+'</div><div class="card-body"><div class="card-badge">'+cfg.badge+'</div><div class="card-name">'+cfg.name+'</div><div class="card-sub">'+cfg.sub+'</div><div class="card-footer"><div class="card-price">'+pesos(cfg.p)+'</div><button class="add-btn">+ Agregar</button></div></div>';
+  el.querySelector(".add-btn").addEventListener("click",function(e){e.stopPropagation();addToCart({name:cfg.name,sub:cfg.sub,p:cfg.p,ico:cfg.ico,img:cfg.img||null});});
+  el.addEventListener("click",function(){openDetail(cfg);});
+  return el;
+}
+
+function buildGrids(){
+  var gs=document.getElementById("grid-switches");
+  SW.forEach(function(s){gs.appendChild(mkCard({name:s.n,badge:s.t,sub:s.sub,p:s.p,vibe:s.vibe,ico:s.ico,img:swImg(s.t),fkey:s.t,meta:s.meta}));});
+  var gk=document.getElementById("grid-keycaps");
+  KC.forEach(function(k){gk.appendChild(mkCard({name:k.n,badge:k.m,sub:k.m+" · "+k.fmt,p:k.p,vibe:k.vibe,ico:k.ico,img:kcImg(k.m),fkey:kcFkey(k.m),meta:k.meta}));});
+  var gp=document.getElementById("grid-pcb");
+  PCB.forEach(function(pc){var fk=pc.lay.includes("Split")?"Split":pc.lay.split(" ")[0];gp.appendChild(mkCard({name:pc.n,badge:pc.lay,sub:pc.teclas+" teclas · "+pc.norm,p:pc.p,vibe:pc.vibe,ico:pc.ico,img:IMPCB,fkey:fk,meta:pc.meta}));});
+}
+
+// ── FILTERS ──
+function doFilter(sec,val,btn){
+  btn.closest(".filters").querySelectorAll(".fpill").forEach(function(p){p.classList.remove("active");});btn.classList.add("active");
+  document.querySelectorAll("#grid-"+sec+" .card").forEach(function(c){
+    var f=c.dataset.f||"",show=val==="todos"||f===val||f.includes(val);
+    c.style.transition="opacity .3s ease,transform .3s ease";
+    if(show){c.style.display="";requestAnimationFrame(function(){c.style.opacity="1";c.style.transform="";});}
+    else{c.style.opacity="0";c.style.transform="translateY(8px)";setTimeout(function(){c.style.display="none";},290);}
+  });
+}
+
+// ── SECTIONS ──
+var heroD={
+  switches:{tag:"Switches Mecánicos",title:"TU PRÓXIMO<br><em>TECLADO</em><br>TE ESPERA",desc:"Los mejores switches lineales, táctiles y silenciosos.",bgLight:"var(--rosa)",bgDark:"#4B1E2B"},
+  keycaps:{tag:"Sets de Keycaps",title:"COLOR Y<br><em>TEXTURA</em><br>EN CADA TECLA",desc:"PBT, ABS y Doubleshot para un teclado único.",bgLight:"#F0C8D8",bgDark:"#3a1422"},
+  pcb:{tag:"PCB & Kits",title:"ARMA TU<br><em>TECLADO</em><br>DESDE CERO",desc:"Kits hotswap de 60% a 100%. ANSI e ISO.",bgLight:"#EAC4D8",bgDark:"#2E0F17"}
+};
+function showSec(id,navBtn,tabBtn){
+  document.querySelectorAll(".nav-tab").forEach(function(b){b.classList.remove("active");});
+  document.querySelectorAll(".sec-tab").forEach(function(t){t.classList.remove("active");});
+  var order=["switches","keycaps","pcb"],idx=order.indexOf(id);
+  if(navBtn)navBtn.classList.add("active");else document.querySelectorAll(".nav-tab")[idx].classList.add("active");
+  if(tabBtn)tabBtn.classList.add("active");else document.getElementById("stab-"+id).classList.add("active");
+  document.querySelectorAll(".catalog").forEach(function(c){c.classList.remove("active");});
+  document.getElementById("sec-"+id).classList.add("active");
+  var h=heroD[id];
+  var isDark = document.documentElement.classList.contains("dark");
+  document.getElementById("hero").style.background = isDark ? h.bgDark : h.bgLight;
+  document.getElementById("htag").textContent=h.tag;
+  document.getElementById("htitle").innerHTML=h.title;
+  document.getElementById("hdesc").textContent=h.desc;
+}
+function goHome(){window.scrollTo({top:0,behavior:"smooth"});showSec("switches");}
+
+// ── OVERLAYS ──
+function openOv(id){document.getElementById("ov-"+id).classList.add("open");document.body.style.overflow="hidden";}
+function closeOv(id,e){if(e&&e.target!==document.getElementById("ov-"+id))return;document.getElementById("ov-"+id).classList.remove("open");document.body.style.overflow="";}
+
+// ── DETAIL ──
+function openDetail(cfg){
+  document.getElementById("d-badge").textContent=cfg.badge||"";
+  document.getElementById("d-name").textContent=cfg.name;
+  document.getElementById("d-price").textContent=pesos(cfg.p);
+  document.getElementById("d-vibe").textContent=cfg.vibe||"";
+  var di=document.getElementById("d-img");di.innerHTML="";
+  if(cfg.img){var img=document.createElement("img");img.src=cfg.img;img.alt=cfg.name;img.onerror=function(){di.innerHTML="<span>"+cfg.ico+"</span>";};di.appendChild(img);}
+  else{di.innerHTML="<span>"+cfg.ico+"</span>";}
+  var meta=document.getElementById("d-meta");meta.innerHTML="";
+  (cfg.meta||[]).forEach(function(pair){meta.innerHTML+='<div class="d-mi"><div class="d-ml">'+pair[0]+'</div><div class="d-mv">'+pair[1]+'</div></div>';});
+  document.getElementById("d-add-btn").onclick=function(){addToCart({name:cfg.name,sub:cfg.badge||"",p:cfg.p,ico:cfg.ico,img:cfg.img||null});closeOv("detail",null);};
+  openOv("detail");
+}
+
+// ── CART OV ──
+function openCart(){renderCart();openOv("cart");}
+
+// ── WIZARD ──
+var wiz={step:0,pcb:null,sw:null,kc:null,asm:false};
+function openWizard(){wiz={step:0,pcb:null,sw:null,kc:null,asm:false};renderWizStep();openOv("wiz");}
+function renderWizStep(){
+  var titles=["Elige tu PCB / Kit","Elige tus Switches","Elige tus Keycaps","¿Servicio de armado?"];
+  var pcts=["25%","50%","75%","100%"];
+  document.getElementById("wiz-title").textContent=titles[wiz.step];
+  document.getElementById("wiz-step").textContent="Paso "+(wiz.step+1)+" de 4";
+  document.getElementById("wiz-bar").style.width=pcts[wiz.step];
+  document.getElementById("wiz-bk").style.display=wiz.step>0?"":"none";
+  var body=document.getElementById("wiz-body");body.innerHTML="";
+  if(wiz.step<3){
+    var datasets=[PCB,SW,KC];var ds=datasets[wiz.step];
+    var selName=[wiz.pcb&&wiz.pcb.n,wiz.sw&&wiz.sw.n,wiz.kc&&wiz.kc.n][wiz.step];
+    var lbl=document.createElement("span");lbl.className="wiz-lbl";lbl.textContent=["Selecciona el kit","¿Qué switches quieres?","Elige tus keycaps"][wiz.step];body.appendChild(lbl);
+    var g=document.createElement("div");g.className="wiz-grid";body.appendChild(g);
+    ds.forEach(function(item){
+      var nm=item.n,price=item.p,label=item.lay||item.t||item.m,icon=item.ico;
+      var opt=document.createElement("div");opt.className="wiz-opt"+(selName===nm?" sel":"");
+      opt.innerHTML='<div class="wiz-oi">'+icon+'</div><div class="wiz-on">'+nm+'</div><div class="wiz-op">'+label+' · '+pesos(price)+'</div>';
+      opt.onclick=function(){
+        if(wiz.step===0)wiz.pcb=item;else if(wiz.step===1)wiz.sw=item;else wiz.kc=item;
+        g.querySelectorAll(".wiz-opt").forEach(function(o){o.classList.remove("sel");});opt.classList.add("sel");
+        updWizTotal();updWizNext();
+      };
+      g.appendChild(opt);
+    });
+  } else {
+    var box=document.createElement("div");box.className="wiz-asm-box";
+    box.innerHTML='<div class="wiz-asm-t">Servicio de armado</div><div class="wiz-asm-d">¿Quieres que armemos tu teclado? Lo ensamblamos, lubricamos y probamos antes de enviarlo.</div><div class="wiz-asm-row"><div class="wiz-ao'+(wiz.asm?'':' sel')+'" id="ao-no">No, lo armo yo<br><small>$0</small></div><div class="wiz-ao'+(wiz.asm?' sel':'')+'" id="ao-yes">Sí, que lo armen<br><small>+$10.000</small></div></div>';
+    body.appendChild(box);
+    document.getElementById("ao-no").onclick=function(){wiz.asm=false;document.getElementById("ao-no").classList.add("sel");document.getElementById("ao-yes").classList.remove("sel");updWizTotal();};
+    document.getElementById("ao-yes").onclick=function(){wiz.asm=true;document.getElementById("ao-yes").classList.add("sel");document.getElementById("ao-no").classList.remove("sel");updWizTotal();};
+  }
+  updWizNext();updWizTotal();
+}
+function updWizTotal(){var t=0;if(wiz.pcb)t+=wiz.pcb.p;if(wiz.sw)t+=wiz.sw.p;if(wiz.kc)t+=wiz.kc.p;if(wiz.asm)t+=10000;document.getElementById("wiz-total").textContent=pesos(t);}
+function updWizNext(){var btn=document.getElementById("wiz-nx");var ok=(wiz.step===0&&wiz.pcb)||(wiz.step===1&&wiz.sw)||(wiz.step===2&&wiz.kc)||(wiz.step===3);btn.disabled=!ok;btn.textContent=wiz.step===3?"Agregar al carrito":"Siguiente";}
+function wizNext(){
+  if(wiz.step===3){
+    if(wiz.pcb)addToCart({name:wiz.pcb.n,sub:"PCB · "+wiz.pcb.lay,p:wiz.pcb.p,ico:wiz.pcb.ico,img:IMPCB});
+    if(wiz.sw)addToCart({name:wiz.sw.n,sub:"Switch · "+wiz.sw.t,p:wiz.sw.p,ico:wiz.sw.ico,img:swImg(wiz.sw.t)});
+    if(wiz.kc)addToCart({name:wiz.kc.n,sub:"Keycap · "+wiz.kc.m,p:wiz.kc.p,ico:wiz.kc.ico,img:kcImg(wiz.kc.m)});
+    if(wiz.asm)addToCart({name:"Servicio de armado",sub:"Ensamblado + lubricado",p:10000,ico:"🔧"});
+    closeOv("wiz",null);openCart();
+  } else {wiz.step++;renderWizStep();}
+}
+function wizBack(){if(wiz.step>0){wiz.step--;renderWizStep();}}
+
+// ── SWIPE CLOSE ──
+var tY=0;
+document.addEventListener("touchstart",function(e){if(e.target.closest(".sheet"))tY=e.touches[0].clientY;},{passive:true});
+document.addEventListener("touchmove",function(e){if(e.target.closest(".sheet")&&e.touches[0].clientY-tY>80){["detail","cart","wiz"].forEach(function(id){if(document.getElementById("ov-"+id).classList.contains("open"))closeOv(id,null);});}},{passive:true});
+
+// ── THEME TOGGLE ──
+function toggleTheme(){
+  var isDark = document.documentElement.classList.toggle("dark");
+  localStorage.setItem("rokubi-theme", isDark ? "dark" : "light");
+  // Update hero backgrounds for dark mode
+  var currentSec = document.querySelector(".catalog.active");
+  if(currentSec){
+    var id = currentSec.id.replace("sec-","");
+    showSec(id);
+  }
+}
+// Restore saved preference
+(function(){
+  if(localStorage.getItem("rokubi-theme")==="dark") document.documentElement.classList.add("dark");
+})();
+
+// ── INIT ──
+buildGrids();
+</script>
+</body>
+</html>
